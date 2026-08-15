@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What's Still Keeping You Stuck?</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f3ee;color:#302b28;font-family:Georgia,"Times New Roman",serif}
+.wrap{width:min(760px,92%);margin:auto;padding:28px 0 55px}.card{background:#fffdf9;border:1px solid #e5ddd5;border-radius:22px;padding:32px;box-shadow:0 10px 30px rgba(50,40,30,.07)}
+h1{font-size:clamp(31px,7vw,48px);line-height:1.08;margin:8px 0 12px}h2{font-size:29px;line-height:1.2;margin:8px 0 14px}h3{font-size:20px}
+p{font-size:17px;line-height:1.65}.eyebrow{text-transform:uppercase;letter-spacing:2px;font:700 12px Arial,sans-serif;color:#806e61}
+.subtitle{color:#716861;font-size:18px;line-height:1.55}.intro{text-align:center}
+.btn{border:0;border-radius:999px;background:#3b332f;color:white;padding:14px 24px;font:700 16px Georgia;cursor:pointer;margin-top:15px}.btn.secondary{background:transparent;color:#3b332f;border:1px solid #cfc4ba}.hidden{display:none!important}
+.progress{margin-bottom:25px}.progressTop{display:flex;justify-content:space-between;font:14px Arial;color:#756c66;margin-bottom:8px}.bar{height:8px;background:#e8e0d9;border-radius:20px;overflow:hidden}.fill{height:100%;width:0;background:#806c5e;transition:.3s}
+.question{font-size:22px;font-weight:700;line-height:1.45;margin-bottom:20px}.option{display:block;width:100%;text-align:left;background:white;border:1px solid #ded5cd;border-radius:14px;padding:16px 17px;margin:9px 0;font:16px/1.5 Georgia;color:#302b28;cursor:pointer}.option:hover{border-color:#806c5e;background:#faf6f1}.option.selected{background:#eee7e0;border-color:#3b332f}
+.note{text-align:center;color:#887e76;font:13px Arial}.resultHeader{text-align:center}.icon{font-size:48px}.box{background:#f3ede7;border-radius:15px;padding:19px;margin:18px 0}.label{font:700 12px Arial;text-transform:uppercase;letter-spacing:1.5px;color:#806e61}.pattern{font-size:24px;font-weight:bold;margin:7px 0}.quote{border-left:3px solid #9a8373;padding-left:15px;font-style:italic;color:#5e554f;margin:22px 0}.scores{border-top:1px solid #e5ddd5;margin-top:28px;padding-top:12px}.row{margin:11px 0}.rowtop{display:flex;justify-content:space-between;font:13px Arial;margin-bottom:5px}.scorebar{height:6px;background:#e5ddd5;border-radius:10px;overflow:hidden}.scorefill{height:100%;background:#8c7667}
+@media(max-width:600px){.wrap{padding-top:15px}.card{padding:23px 18px}.question{font-size:20px}p{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section id="intro" class="card intro">
+<div class="eyebrow">Self-Reflection Assessment</div>
+<h1>What's Still Keeping You Stuck?</h1>
+<p class="subtitle">You may have moved on from what happened.<br>But have you moved on from what it made you feel?</p>
+<p>This 15-question assessment explores how your past may still influence your emotions, choices, relationships and view of yourself.</p>
+<p>There are no right or wrong answers. Choose what feels most honestly like you—not what you think you should choose.</p>
+<button class="btn" onclick="startQuiz()">Start Assessment</button>
+</section>
+
+<section id="quiz" class="card hidden">
+<div class="progress">
+<div class="progressTop"><span id="qnum"></span><span id="pct"></span></div>
+<div class="bar"><div id="fill" class="fill"></div></div>
+</div>
+<div id="qtext" class="question"></div>
+<div id="opts"></div>
+<p class="note">Choose your most honest reaction.</p>
+</section>
+
+<section id="result" class="card hidden">
+<div class="resultHeader"><div id="icon" class="icon"></div><div class="eyebrow">Your Result</div><h2 id="title"></h2><p id="headline" class="subtitle"></p></div>
+<div id="body"></div>
+<div class="box"><div class="label">🔍 What's Still Keeping You Stuck?</div><div id="pname" class="pattern"></div><p id="ptext"></p></div>
+<div class="box"><div class="label">⚠️ Your Blind Spot</div><p id="blind"></p></div>
+<div class="box"><div class="label">🌱 Your Next Reflection</div><p id="reflect"></p></div>
+<div class="quote">"You don't have to erase your past to stop letting it run your present."</div>
+<div class="scores"><h3>Your hidden pattern profile</h3><div id="scoreRows"></div></div>
+<div style="text-align:center"><button class="btn secondary" onclick="restart()">Take Assessment Again</button></div>
+</section>
+</div>
+
+<script>
+const Q=[
+["You're scrolling through your phone and an old photo from a difficult chapter of your life suddenly appears. You weren't looking for it. What's your most honest reaction?",[
+["You feel something for a moment, acknowledge the memory, and continue with your day.","peace","integration"],
+["You start thinking about how differently things might have turned out if certain things had happened differently.","anchor","alternate"],
+["You remember how unfairly you were treated, and the anger comes back for a while.","bound","anger"],
+["You start going through more old photos, messages, or memories because a part of you wants to revisit that time.","healing","attachment"]]],
+["You're having a normal conversation when someone unexpectedly mentions a person or situation from your past. What happens inside you?",[
+["You can talk about it without feeling much emotionally. It's simply something that happened in your life.","peace","integration"],
+["You feel a little emotional, but you're able to stay present and continue the conversation.","healing","emotion"],
+["You immediately become curious about what they're doing now and how their life turned out.","anchor","attachment"],
+["Your mood changes noticeably, even if you don't say anything, and you find yourself thinking about it long after the conversation ends.","bound","emotion"]]],
+["You find out that someone from your past is doing really well now. Maybe they have a great career, relationship, or life. What's your first genuine reaction?",[
+["You feel genuinely happy for them and then return to your own life.","peace","integration"],
+["You're happy for them, but it makes you wonder how different your own life might have been.","anchor","alternate"],
+["You start comparing where they are now with where you are.","healing","comparison"],
+["Something about their happiness bothers you because part of you feels they shouldn't be doing so well after what happened.","bound","anger"]]],
+["You're having a particularly difficult day. Suddenly, you remember how a person or situation from your past once made you feel. What happens?",[
+["You notice the memory but don't feel a strong need to return to it.","peace","integration"],
+["You miss the feeling for a moment, but you understand that missing something doesn't necessarily mean you want it back.","healing","nostalgia"],
+["You start thinking, 'Things were better when I had that in my life.'","anchor","nostalgia"],
+["You find yourself wishing you could somehow go back to that period.","bound","attachment"]]],
+["You're given an opportunity to visit a place strongly connected to your past—a college, workplace, neighbourhood, café, or city. What feels most natural?",[
+["You'd go without much hesitation. It's part of your history, but it doesn't own your emotions anymore.","peace","integration"],
+["You'd probably feel nostalgic, but you'd also be curious to experience the place as the person you've become.","healing","nostalgia"],
+["You'd hesitate because you know being there could bring back too many memories.","anchor","avoidance"],
+["You'd feel strangely drawn toward it because being there would let you revisit a time you still miss.","bound","attachment"]]],
+["Imagine you finally receive the apology or explanation you once desperately wanted. It doesn't change what happened. But you finally hear the words. What's your honest reaction?",[
+["It might feel good, but you realise you don't need their apology anymore to move forward.","peace","integration"],
+["You feel a huge sense of relief because you've been carrying unanswered questions for a long time.","healing","closure"],
+["You immediately start wondering whether this changes anything between you now.","anchor","attachment"],
+["You realise that part of you has been waiting for this moment for much longer than you admitted.","bound","closure"]]],
+["You're starting a new relationship, friendship, job, or opportunity. Everything is going reasonably well. Then something about it reminds you of a painful experience from your past. What do you do?",[
+["You notice the similarity but remind yourself that this is a different situation and a different person.","peace","integration"],
+["You become cautious because you don't want to make the same mistake again.","healing","fear"],
+["You start looking for signs that the same thing might happen again.","anchor","fear"],
+["You emotionally pull back because getting close feels like giving the past another opportunity to hurt you.","bound","protection"]]],
+["Imagine you could go back and change one decision from your past. You know you can't actually change it—but you can imagine doing so. What feels closest to you?",[
+["There are things I'd handle differently, but I wouldn't want to rewrite my life.","peace","integration"],
+["You immediately know the exact moment you'd change—and you've thought about it before.","healing","regret"],
+["You start imagining how your life today might look if you'd made that different choice.","anchor","alternate"],
+["You think mostly about how someone else could have behaved differently and how much that might have changed things.","bound","anger"]]],
+["It's late at night. Nothing particularly bad happened that day, but your mind naturally drifts toward your past. Where does it usually go?",[
+["Memories come and go, but your mind eventually returns to the present.","peace","integration"],
+["You replay conversations and wonder what you should have said or done differently.","healing","regret"],
+["You imagine how things could have turned out if the past had gone another way.","anchor","alternate"],
+["You revisit the emotions of what happened and find yourself feeling the same hurt, anger, or sadness again.","bound","emotion"]]],
+["Someone new enters your life and genuinely seems to like you. But getting close to them reminds you of something that hurt you before. What's your instinct?",[
+["You allow this person to be themselves rather than making them pay for someone else's mistakes.","peace","integration"],
+["You're cautious at first, but gradually let trust develop based on what this person actually does.","healing","fear"],
+["You keep waiting for the same problems to appear again.","anchor","fear"],
+["You keep an emotional distance because getting attached feels too risky.","bound","protection"]]],
+["You think about the person you were before the painful experience changed you. What do you feel?",[
+["You recognise that you've changed, and you actually like the person you've become.","peace","integration"],
+["You sometimes miss your old self, but you understand why you've changed.","healing","nostalgia"],
+["You wish you could go back to being the person you were before everything happened.","anchor","identity"],
+["You feel that the experience took something away from you that you haven't been able to get back.","bound","identity"]]],
+["Someone asks: 'What did that experience teach you?' What's closest to your honest answer?",[
+["You can clearly see what you learned, even though the experience was painful.","peace","integration"],
+["You know it changed you, although you're still figuring out exactly how.","healing","emotion"],
+["Your mind immediately goes toward what you lost, what went wrong, or what you wish had been different.","anchor","regret"],
+["You struggle to see anything beyond the hurt itself.","bound","emotion"]]],
+["You notice yourself doing something that once hurt you—withdrawing, chasing someone, avoiding difficult conversations, distrusting people, or trying too hard to keep someone close. What happens?",[
+["You recognise the pattern and consciously choose to respond differently.","peace","integration"],
+["You notice it after some hesitation and try to correct yourself.","healing","awareness"],
+["You recognise what's happening but still find yourself repeating it sometimes.","anchor","repetition"],
+["The old response feels almost automatic because it once helped you protect yourself.","bound","protection"]]],
+["Imagine that the person or situation from your past somehow became available to you again tomorrow. What's your most honest reaction?",[
+["Whatever I choose would be based on who I am and what I want today—not what I once wanted.","peace","integration"],
+["I'd have to think about it because a small part of me still wonders what could have been.","healing","attachment"],
+["The thought immediately brings up a lot of 'what ifs.'","anchor","alternate"],
+["My first reaction is emotional. I realise some part of me is still waiting for that possibility.","bound","attachment"]]],
+["You picture yourself five years from today. How much space does your past occupy in that picture?",[
+["Very little. It's part of my story, but I'm much more interested in what comes next.","peace","integration"],
+["I still carry some lessons and memories from it, but my attention is mostly on the future.","healing","awareness"],
+["I sometimes imagine my future in relation to what happened—as if I'm trying to make up for something.","anchor","regret"],
+["A part of me feels that something from the past needs to be resolved before I can completely move forward.","bound","closure"]]]
+];
+
+const STATES={
+peace:{icon:"🌱",title:"THE PEACEFUL MOVER",headline:"You've made peace with your past.",body:"The past is still part of your story, but it isn't running your present. You can remember without needing to return. You can acknowledge what happened without constantly asking what could have been.",strength:"Acceptance without attachment."},
+healing:{icon:"🌤️",title:"THE HEALING MOVER",headline:"You've moved forward, but some parts of the past still have a voice.",body:"You're living your life and may genuinely feel like you've moved on. But certain triggers can still reopen an emotional door. You don't necessarily want the past back. There may simply be something you haven't completely processed yet.",strength:"Awareness and forward movement."},
+anchor:{icon:"🪞",title:"THE EMOTIONAL ANCHOR",headline:"You've left the past behind—but part of you is still looking back.",body:"You may not want to return to what happened. But regret, unanswered questions, comparison, nostalgia, or 'what if?' thoughts may still keep part of your attention there. You're moving forward physically, but emotionally, there may still be a conversation happening with the past.",strength:"Your awareness can become the doorway to change."},
+bound:{icon:"🔒",title:"THE PAST-BOUND",headline:"Your past may still be influencing your present more than you realise.",body:"You may be protecting yourself, replaying what happened, waiting for closure, or holding onto a version of the past that never got the ending you wanted. This doesn't mean you're choosing to stay stuck. It may simply mean your mind hasn't found a way to feel safe moving forward yet.",strength:"The pattern can change once you can see it clearly."}
+};
+
+const PAT={
+regret:["Regret","You may be carrying the feeling that one different decision, conversation, or action could have changed everything. Your mind keeps negotiating with a version of the past that cannot be changed.","Replaying the past can create the illusion that you're solving it. Sometimes you're simply keeping the wound active.","If I could not change what happened, what would I choose to do with the lesson it left me?"],
+closure:["Need for Closure","Part of you may still be waiting for an answer, apology, explanation, or acknowledgment that would finally make the experience feel complete.","Closure does not always arrive from the person who left the wound. Waiting for their answer can keep your healing dependent on them.","What would I allow myself to accept even if I never receive the explanation I wanted?"],
+attachment:["Attachment","You may not simply be attached to the person or situation. You may still be attached to what it represented—the connection, possibility, identity, or future you imagined.","Missing something doesn't automatically mean you should have it back.","Do I miss what actually existed, or what I hoped it would become?"],
+nostalgia:["Nostalgia","You may be longing less for the past itself and more for who you were, how life felt, or what that chapter represented.","Memory often keeps the warmth and quietly edits out the reasons the chapter ended.","What exactly am I missing—and can I create that feeling in my life now?"],
+anger:["Unresolved Anger","Something about what happened may still feel unfair. You may understand that the situation is over while still carrying the emotional weight of what you believe should never have happened.","Holding onto anger can feel like refusing to let someone 'get away with it,' but it can also keep their actions present in your life.","What would letting go of the anger give me that holding onto it no longer does?"],
+fear:["Fear of Repetition","Your past may have taught you a lesson that your mind has turned into a warning system. You may watch for signs that the same pain could happen again.","Protecting yourself from the possibility of pain can also protect you from the possibility of something good.","Am I responding to what is happening now—or to what happened then?"],
+alternate:["The Alternate Life","Part of you may still be attached to the life you imagine you could have had if one decision, relationship, opportunity, or moment had gone differently.","An imagined future has no painful details, which can make it look better than the life that actually existed.","What can I build now that belongs to the life I actually have?"],
+identity:["Identity Loss","The experience may have changed how you see yourself. You may not only miss what happened—you may miss who you were before it happened.","You don't have to become your old self again to become whole. You can build an identity that includes what you've learned.","Who am I becoming now that this chapter is no longer the centre of my story?"],
+protection:["Emotional Protection","Your mind may have learned to protect you by staying distant, guarded, or prepared for disappointment. What once helped you survive the experience may still be shaping how you approach the present.","A defence that once kept you safe can become a wall when the danger is no longer there.","Where am I protecting myself from a danger that belongs to the past?"],
+emotion:["Unprocessed Emotion","The event may be over, but some of the emotion around it may not have been fully processed. Thinking you've moved on and actually processing what you felt are not always the same thing.","Ignoring an emotion doesn't make it disappear; it can simply make it show up somewhere else.","What feeling have I been trying to move past instead of allowing myself to understand?"],
+repetition:["Old Pattern","Your past may still be showing up through behaviour rather than memories. You may understand what happened but still repeat a response that once helped you cope.","Knowing the pattern intellectually isn't the same as responding differently when the trigger appears.","What would I do differently if I trusted myself to handle the outcome?"],
+awareness:["Awareness in Progress","You're beginning to recognise what the past changed in you. You may not have all the answers yet, but you are no longer completely unaware of the pattern.","Understanding yourself is valuable, but awareness becomes powerful when it starts changing your choices.","What is one small response I can change the next time this pattern appears?"],
+comparison:["Comparison With the Past","Your present may sometimes be measured against another person's progress or against the life you expected to have by now.","Comparing your current chapter with someone else's—or with an imagined version of your own life—can make the present feel smaller than it is.","What would my progress look like if I stopped using the past as my measuring stick?"],
+avoidance:["Emotional Avoidance","You may be avoiding certain places, memories, conversations, or situations because they still carry emotional weight.","Avoiding a trigger can reduce discomfort today without necessarily reducing its power over you.","What am I avoiding because I don't want to feel something—and what might happen if I allowed myself to feel it safely?"]
+};
+
+let index=0, data=[], scores={};
+
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function startQuiz(){
+ index=0; data=[]; scores={};
+ document.getElementById("intro").classList.add("hidden");
+ document.getElementById("result").classList.add("hidden");
+ document.getElementById("quiz").classList.remove("hidden");
+ show();
+}
+function show(){
+ const q=Q[index], opts=shuffle(q[1]);
+ data[index]=opts;
+ document.getElementById("qnum").textContent=`Question ${index+1} of ${Q.length}`;
+ const pct=Math.round((index+1)/Q.length*100);
+ document.getElementById("pct").textContent=pct+"%";
+ document.getElementById("fill").style.width=pct+"%";
+ document.getElementById("qtext").textContent=q[0];
+ const box=document.getElementById("opts");box.innerHTML="";
+ opts.forEach((o,i)=>{
+  const b=document.createElement("button");b.className="option";
+  b.textContent=String.fromCharCode(65+i)+") "+o[0];
+  b.onclick=()=>answer(i,b);box.appendChild(b);
+ });
+}
+function answer(i,b){
+ document.querySelectorAll(".option").forEach(x=>x.disabled=true);
+ b.classList.add("selected");
+ const o=data[index][i];
+ scores[o[1]]=(scores[o[1]]||0)+1;
+ scores["p_"+o[2]]=(scores["p_"+o[2]]||0)+1;
+ setTimeout(()=>{if(index<Q.length-1){index++;show()}else{finish()}},220);
+}
+function finish(){
+ const stateKeys=["peace","healing","anchor","bound"];
+ const state={peace:scores.peace||0,healing:scores.healing||0,anchor:scores.anchor||0,bound:scores.bound||0};
+ let stateWin="peace";
+ stateKeys.forEach(k=>{if(state[k]>state[stateWin])stateWin=k});
+ const patterns=Object.keys(PAT);
+ let pWin=patterns[0];
+ patterns.forEach(k=>{if((scores["p_"+k]||0)>(scores["p_"+pWin]||0))pWin=k});
+ const neutral=scores["p_integration"]||0;
+ const hidden=patterns.reduce((n,k)=>n+(scores["p_"+k]||0),0);
+ if(neutral>=8 && hidden<=5)pWin="integration";
+ render(stateWin,pWin);
+}
+function render(sk,pk){
+ const s=STATES[sk], p=PAT[pk];
+ document.getElementById("quiz").classList.add("hidden");
+ document.getElementById("result").classList.remove("hidden");
+ document.getElementById("icon").textContent=s.icon;
+ document.getElementById("title").textContent=s.title;
+ document.getElementById("headline").textContent=s.headline;
+ document.getElementById("body").innerHTML="<p>"+s.body+"</p><p><strong>Your strength:</strong> "+s.strength+"</p>";
+ if(pk==="integration"){
+  document.getElementById("pname").textContent="Integration";
+  document.getElementById("ptext").textContent="Your answers suggest that the past has become part of your story without demanding much emotional attention from you today.";
+  document.getElementById("blind").textContent="Being at peace doesn't mean the past never crosses your mind. It means it doesn't need to control what happens next.";
+  document.getElementById("reflect").textContent="What lesson from my past do I want to carry forward without carrying the pain?";
+ }else{
+  document.getElementById("pname").textContent=p[0];
+  document.getElementById("ptext").textContent=p[1];
+  document.getElementById("blind").textContent=p[2];
+  document.getElementById("reflect").textContent=p[3];
+ }
+ const rows=document.getElementById("scoreRows");rows.innerHTML="";
+ patternsForDisplay=["regret","closure","attachment","nostalgia","anger","fear","alternate"];
+ patternsForDisplay.forEach(k=>{
+  const n=scores["p_"+k]||0, w=Math.min(100,n*20);
+  rows.innerHTML+=`<div class="row"><div class="rowtop"><span>${PAT[k][0]}</span><span>${n}</span></div><div class="scorebar"><div class="scorefill" style="width:${w}%"></div></div></div>`;
+ });
+}
+function restart(){
+ document.getElementById("result").classList.add("hidden");
+ document.getElementById("quiz").classList.add("hidden");
+ document.getElementById("intro").classList.remove("hidden");
+}
+</script>
+</body>
+</html>
