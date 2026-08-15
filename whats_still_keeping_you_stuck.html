@@ -1,56 +1,417 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>What's Still Keeping You Stuck?</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f7f3ee;color:#302b28;font-family:Georgia,"Times New Roman",serif}
-.wrap{width:min(760px,92%);margin:auto;padding:28px 0 55px}.card{background:#fffdf9;border:1px solid #e5ddd5;border-radius:22px;padding:32px;box-shadow:0 10px 30px rgba(50,40,30,.07)}
-h1{font-size:clamp(31px,7vw,48px);line-height:1.08;margin:8px 0 12px}h2{font-size:29px;line-height:1.2;margin:8px 0 14px}h3{font-size:20px}
-p{font-size:17px;line-height:1.65}.eyebrow{text-transform:uppercase;letter-spacing:2px;font:700 12px Arial,sans-serif;color:#806e61}
-.subtitle{color:#716861;font-size:18px;line-height:1.55}.intro{text-align:center}
-.btn{border:0;border-radius:999px;background:#3b332f;color:white;padding:14px 24px;font:700 16px Georgia;cursor:pointer;margin-top:15px}.btn.secondary{background:transparent;color:#3b332f;border:1px solid #cfc4ba}.hidden{display:none!important}
-.progress{margin-bottom:25px}.progressTop{display:flex;justify-content:space-between;font:14px Arial;color:#756c66;margin-bottom:8px}.bar{height:8px;background:#e8e0d9;border-radius:20px;overflow:hidden}.fill{height:100%;width:0;background:#806c5e;transition:.3s}
-.question{font-size:22px;font-weight:700;line-height:1.45;margin-bottom:20px}.option{display:block;width:100%;text-align:left;background:white;border:1px solid #ded5cd;border-radius:14px;padding:16px 17px;margin:9px 0;font:16px/1.5 Georgia;color:#302b28;cursor:pointer}.option:hover{border-color:#806c5e;background:#faf6f1}.option.selected{background:#eee7e0;border-color:#3b332f}
-.note{text-align:center;color:#887e76;font:13px Arial}.resultHeader{text-align:center}.icon{font-size:48px}.box{background:#f3ede7;border-radius:15px;padding:19px;margin:18px 0}.label{font:700 12px Arial;text-transform:uppercase;letter-spacing:1.5px;color:#806e61}.pattern{font-size:24px;font-weight:bold;margin:7px 0}.quote{border-left:3px solid #9a8373;padding-left:15px;font-style:italic;color:#5e554f;margin:22px 0}.scores{border-top:1px solid #e5ddd5;margin-top:28px;padding-top:12px}.row{margin:11px 0}.rowtop{display:flex;justify-content:space-between;font:13px Arial;margin-bottom:5px}.scorebar{height:6px;background:#e5ddd5;border-radius:10px;overflow:hidden}.scorefill{height:100%;background:#8c7667}
-@media(max-width:600px){.wrap{padding-top:15px}.card{padding:23px 18px}.question{font-size:20px}p{font-size:16px}}
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --ink:#1a1714;
+  --paper:#f8f4ef;
+  --cream:#f0ebe4;
+  --card:#fdfaf6;
+  --muted:#9a9087;
+  --soft:#7a7068;
+  --border:rgba(0,0,0,0.09);
+  --gold:#b08a5e;
+  --gold-light:#e8d9c4;
+  --gold-glow:rgba(176,138,94,0.12);
+  --peace:#4a7c59;
+  --healing:#5a6fa8;
+  --anchor:#8a6a2a;
+  --bound:#8a3a3a;
+}
+
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+}
+
+/* ── SCREENS ────────────────────────────── */
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ── SHARED LAYOUT ──────────────────────── */
+.shell{
+  width:100%;
+  max-width:700px;
+  margin:0 auto;
+  padding:0 28px;
+}
+
+/* ── INTRO ──────────────────────────────── */
+#intro{
+  min-height:100vh;
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  padding:70px 0 80px;
+}
+#intro.active{display:flex;}
+
+.intro-inner{max-width:700px;margin:0 auto;width:100%;padding:0 28px;}
+
+.intro-eyebrow{
+  font-size:10px;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--gold);font-weight:500;margin-bottom:36px;
+  display:flex;align-items:center;gap:14px;
+}
+.intro-eyebrow::after{content:'';flex:1;max-width:50px;height:1px;background:var(--gold);opacity:0.4;}
+
+.intro-headline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(34px,6vw,58px);
+  font-weight:300;line-height:1.1;
+  margin-bottom:24px;color:var(--ink);
+}
+.intro-headline em{font-style:italic;color:var(--gold);}
+
+.intro-deck{
+  font-size:17px;font-weight:300;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  color:var(--soft);line-height:1.7;
+  margin-bottom:20px;
+  border-left:2px solid var(--gold-light);
+  padding-left:20px;
+  max-width:520px;
+}
+.intro-body{
+  font-size:13px;font-weight:300;color:var(--muted);
+  line-height:1.85;max-width:500px;margin-bottom:44px;
+}
+
+.intro-meta{
+  display:flex;flex-wrap:wrap;gap:10px;margin-bottom:44px;
+}
+.meta-chip{
+  padding:6px 16px;border:1px solid var(--border);
+  font-size:11px;letter-spacing:0.06em;color:var(--muted);
+  border-radius:100px;
+}
+
+.btn-start{
+  display:inline-flex;align-items:center;gap:14px;
+  background:var(--ink);color:var(--paper);border:none;
+  padding:15px 32px;font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;cursor:pointer;
+  transition:all 0.3s ease;position:relative;overflow:hidden;
+  border-radius:3px;
+}
+.btn-start::before{
+  content:'';position:absolute;inset:0;
+  background:var(--gold);transform:translateX(-100%);
+  transition:transform 0.4s ease;
+}
+.btn-start:hover::before{transform:translateX(0);}
+.btn-start span,.btn-start .arr{position:relative;z-index:1;}
+.arr{
+  width:18px;height:1px;background:currentColor;position:relative;
+  transition:width 0.3s;
+}
+.arr::after{
+  content:'';position:absolute;right:-1px;top:-3px;
+  width:7px;height:7px;
+  border-right:1px solid currentColor;border-top:1px solid currentColor;
+  transform:rotate(45deg);
+}
+.btn-start:hover .arr{width:26px;}
+.intro-note{margin-top:20px;font-size:11px;color:var(--muted);letter-spacing:0.04em;}
+
+/* ── QUIZ ───────────────────────────────── */
+#quiz{min-height:100vh;padding:0 0 80px;}
+
+.quiz-topbar{
+  padding:28px 28px 28px;
+  max-width:700px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  margin-bottom:52px;
+}
+.quiz-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;font-style:italic;color:var(--muted);
+}
+.prog-right{display:flex;align-items:center;gap:12px;}
+.prog-num{font-size:11px;letter-spacing:0.1em;color:var(--muted);}
+.prog-track{width:80px;height:1px;background:var(--border);position:relative;}
+.prog-fill{position:absolute;left:0;top:0;height:100%;background:var(--gold);transition:width 0.5s ease;}
+
+.q-wrap{max-width:700px;margin:0 auto;padding:0 28px;animation:fadeUp 0.4s ease both;}
+
+.q-number{
+  font-size:10px;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--gold);font-weight:500;margin-bottom:18px;
+}
+.q-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(20px,3.5vw,27px);
+  font-weight:300;line-height:1.45;
+  color:var(--ink);margin-bottom:36px;
+}
+
+.opts{display:flex;flex-direction:column;gap:10px;margin-bottom:44px;}
+
+.opt{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:18px 20px;border:1px solid var(--border);
+  background:transparent;border-radius:6px;
+  cursor:pointer;text-align:left;transition:all 0.22s ease;
+  position:relative;overflow:hidden;width:100%;
+}
+.opt::before{
+  content:'';position:absolute;inset:0;
+  background:var(--gold-glow);opacity:0;transition:opacity 0.22s;
+}
+.opt:hover::before{opacity:1;}
+.opt:hover{border-color:rgba(176,138,94,0.4);}
+.opt.selected{border-color:var(--gold);background:var(--gold-glow);}
+.opt:disabled{cursor:default;}
+
+.opt-letter{
+  width:24px;height:24px;border-radius:50%;
+  border:1px solid var(--border);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:500;letter-spacing:0.05em;
+  color:var(--muted);margin-top:1px;transition:all 0.22s;
+  position:relative;z-index:1;
+}
+.opt.selected .opt-letter{background:var(--gold);border-color:var(--gold);color:#fff;}
+.opt-text{
+  font-size:13px;font-weight:300;line-height:1.7;
+  color:var(--soft);position:relative;z-index:1;transition:color 0.22s;
+}
+.opt:hover .opt-text,.opt.selected .opt-text{color:var(--ink);}
+
+.q-note{
+  text-align:center;font-size:11px;letter-spacing:0.06em;
+  color:var(--muted);margin-top:-30px;margin-bottom:44px;
+}
+
+/* ── RESULT ─────────────────────────────── */
+#result{padding:0 0 100px;}
+
+.res-topbar{
+  padding:28px 28px;max-width:700px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);margin-bottom:0;
+}
+
+/* hero band */
+.res-hero{
+  padding:44px 28px 40px;
+  max-width:700px;margin:0 auto 0;
+  animation:fadeUp 0.5s ease both;
+}
+.res-state-tag{
+  font-size:10px;letter-spacing:0.25em;text-transform:uppercase;
+  font-weight:500;margin-bottom:14px;
+}
+.res-icon{font-size:32px;margin-bottom:14px;line-height:1;}
+.res-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,5vw,44px);
+  font-weight:400;line-height:1.1;margin-bottom:12px;
+}
+.res-headline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;font-style:italic;font-weight:300;
+  color:var(--soft);line-height:1.7;max-width:500px;margin-bottom:0;
+}
+.res-rule{width:44px;height:1px;background:var(--gold);margin:24px 0 0;}
+
+/* content section */
+.res-content{max-width:700px;margin:0 auto;padding:0 28px;}
+
+/* state card */
+.res-state-card{
+  padding:28px 30px;border:1px solid var(--border);
+  background:var(--card);border-radius:6px;
+  margin:28px 0 12px;
+  animation:fadeUp 0.5s 0.1s ease both;
+}
+.card-eyebrow{
+  font-size:9px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-eyebrow::before{content:'';width:16px;height:1px;background:var(--gold);opacity:0.5;}
+.card-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:19px;font-weight:400;color:var(--ink);margin-bottom:12px;
+}
+.card-body{font-size:13px;font-weight:300;line-height:1.85;color:var(--muted);}
+.card-strength{
+  margin-top:16px;padding-top:16px;border-top:1px solid var(--border);
+  font-size:12px;font-weight:500;letter-spacing:0.06em;color:var(--gold);
+}
+
+/* pattern highlight card */
+.res-pattern-card{
+  padding:28px 30px;border-radius:6px;
+  margin:0 0 12px;
+  animation:fadeUp 0.5s 0.15s ease both;
+  border:1px solid var(--gold);
+  background:var(--gold-glow);
+  position:relative;overflow:hidden;
+}
+.pattern-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;font-weight:400;color:var(--ink);margin-bottom:10px;
+}
+.pattern-body{font-size:13px;font-weight:300;line-height:1.85;color:var(--soft);}
+
+/* two col cards */
+.res-two{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin:0 0 12px;
+  animation:fadeUp 0.5s 0.2s ease both;
+}
+@media(max-width:520px){.res-two{grid-template-columns:1fr;}}
+.res-two .res-mini{
+  padding:24px 24px;border:1px solid var(--border);
+  background:var(--card);border-radius:6px;
+}
+
+/* score bars */
+.res-scores{
+  padding:28px 30px;border:1px solid var(--border);
+  background:var(--card);border-radius:6px;
+  margin:0 0 12px;
+  animation:fadeUp 0.5s 0.25s ease both;
+}
+.scores-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:400;color:var(--ink);margin-bottom:20px;
+}
+.score-row{margin-bottom:14px;}
+.score-top{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:5px;
+}
+.score-label{font-size:11px;letter-spacing:0.05em;color:var(--soft);}
+.score-num{font-size:11px;color:var(--muted);}
+.score-track{height:2px;background:var(--border);border-radius:2px;position:relative;}
+.score-bar-fill{height:100%;border-radius:2px;background:var(--gold);transition:width 0.8s cubic-bezier(0.22,1,0.36,1);}
+
+/* quote */
+.res-quote{
+  padding:24px 28px 24px 24px;
+  border-left:2px solid var(--gold);
+  margin:0 0 40px;
+  animation:fadeUp 0.5s 0.3s ease both;
+}
+.res-quote-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-style:italic;font-weight:300;
+  color:var(--ink);line-height:1.65;
+}
+
+/* retake */
+.res-retake{
+  text-align:center;
+  animation:fadeUp 0.5s 0.35s ease both;
+}
+.btn-retake{
+  display:inline-flex;align-items:center;gap:10px;
+  background:transparent;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:12px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted);transition:color 0.3s;padding:0;
+}
+.btn-retake:hover{color:var(--gold);}
+
+/* ── ANIMATIONS ─────────────────────────── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-8px);}
+  40%{transform:translateX(8px);}
+  60%{transform:translateX(-5px);}
+  80%{transform:translateX(5px);}
+}
+
+@media(max-width:560px){
+  .quiz-topbar,.res-topbar{padding:20px 20px;}
+  .q-wrap,.intro-inner,.res-hero,.res-content{padding-left:20px;padding-right:20px;}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-<section id="intro" class="card intro">
-<div class="eyebrow">Self-Reflection Assessment</div>
-<h1>What's Still Keeping You Stuck?</h1>
-<p class="subtitle">You may have moved on from what happened.<br>But have you moved on from what it made you feel?</p>
-<p>This 15-question assessment explores how your past may still influence your emotions, choices, relationships and view of yourself.</p>
-<p>There are no right or wrong answers. Choose what feels most honestly like you—not what you think you should choose.</p>
-<button class="btn" onclick="startQuiz()">Start Assessment</button>
-</section>
 
-<section id="quiz" class="card hidden">
-<div class="progress">
-<div class="progressTop"><span id="qnum"></span><span id="pct"></span></div>
-<div class="bar"><div id="fill" class="fill"></div></div>
+<!-- ══ INTRO ══════════════════════════════ -->
+<div id="intro" class="screen active">
+  <div class="intro-inner">
+    <div class="intro-eyebrow">Self-Reflection Assessment</div>
+
+    <h1 class="intro-headline">
+      What's still<br>keeping you <em>stuck?</em>
+    </h1>
+
+    <p class="intro-deck">
+      You may have moved on from what happened.<br>
+      But have you moved on from what it made you feel?
+    </p>
+
+    <p class="intro-body">
+      This 15-question assessment explores how your past may still influence your emotions, choices, relationships, and view of yourself. There are no right or wrong answers — choose what feels most honestly like you.
+    </p>
+
+    <div class="intro-meta">
+      <span class="meta-chip">15 Questions</span>
+      <span class="meta-chip">5–8 Minutes</span>
+      <span class="meta-chip">4 Emotional States</span>
+      <span class="meta-chip">No Right Answers</span>
+    </div>
+
+    <button class="btn-start" onclick="startQuiz()">
+      <span>Begin Assessment</span>
+      <div class="arr"></div>
+    </button>
+
+    <p class="intro-note">Your responses are not stored or shared.</p>
+  </div>
 </div>
-<div id="qtext" class="question"></div>
-<div id="opts"></div>
-<p class="note">Choose your most honest reaction.</p>
-</section>
 
-<section id="result" class="card hidden">
-<div class="resultHeader"><div id="icon" class="icon"></div><div class="eyebrow">Your Result</div><h2 id="title"></h2><p id="headline" class="subtitle"></p></div>
-<div id="body"></div>
-<div class="box"><div class="label">🔍 What's Still Keeping You Stuck?</div><div id="pname" class="pattern"></div><p id="ptext"></p></div>
-<div class="box"><div class="label">⚠️ Your Blind Spot</div><p id="blind"></p></div>
-<div class="box"><div class="label">🌱 Your Next Reflection</div><p id="reflect"></p></div>
-<div class="quote">"You don't have to erase your past to stop letting it run your present."</div>
-<div class="scores"><h3>Your hidden pattern profile</h3><div id="scoreRows"></div></div>
-<div style="text-align:center"><button class="btn secondary" onclick="restart()">Take Assessment Again</button></div>
-</section>
+<!-- ══ QUIZ ═══════════════════════════════ -->
+<div id="quiz" class="screen">
+  <div class="quiz-topbar">
+    <div class="quiz-brand">What's Keeping You Stuck</div>
+    <div class="prog-right">
+      <span class="prog-num" id="prog-num">1 / 15</span>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="q-wrap" id="q-wrap">
+    <div class="q-number" id="q-number">Question 1</div>
+    <div class="q-text" id="q-text"></div>
+    <div class="opts" id="opts"></div>
+    <p class="q-note">Choose your most honest reaction</p>
+  </div>
+</div>
+
+<!-- ══ RESULT ══════════════════════════════ -->
+<div id="result" class="screen">
+  <div class="res-topbar">
+    <div class="quiz-brand">What's Keeping You Stuck</div>
+    <span class="prog-num">Your Result</span>
+  </div>
+  <div id="result-inner"></div>
 </div>
 
 <script>
+// ── DATA ─────────────────────────────────────────────────
 const Q=[
 ["You're scrolling through your phone and an old photo from a difficult chapter of your life suddenly appears. You weren't looking for it. What's your most honest reaction?",[
 ["You feel something for a moment, acknowledge the memory, and continue with your day.","peace","integration"],
@@ -72,7 +433,7 @@ const Q=[
 ["You miss the feeling for a moment, but you understand that missing something doesn't necessarily mean you want it back.","healing","nostalgia"],
 ["You start thinking, 'Things were better when I had that in my life.'","anchor","nostalgia"],
 ["You find yourself wishing you could somehow go back to that period.","bound","attachment"]]],
-["You're given an opportunity to visit a place strongly connected to your past—a college, workplace, neighbourhood, café, or city. What feels most natural?",[
+["You're given an opportunity to visit a place strongly connected to your past — a college, workplace, neighbourhood, café, or city. What feels most natural?",[
 ["You'd go without much hesitation. It's part of your history, but it doesn't own your emotions anymore.","peace","integration"],
 ["You'd probably feel nostalgic, but you'd also be curious to experience the place as the person you've become.","healing","nostalgia"],
 ["You'd hesitate because you know being there could bring back too many memories.","anchor","avoidance"],
@@ -87,9 +448,9 @@ const Q=[
 ["You become cautious because you don't want to make the same mistake again.","healing","fear"],
 ["You start looking for signs that the same thing might happen again.","anchor","fear"],
 ["You emotionally pull back because getting close feels like giving the past another opportunity to hurt you.","bound","protection"]]],
-["Imagine you could go back and change one decision from your past. You know you can't actually change it—but you can imagine doing so. What feels closest to you?",[
+["Imagine you could go back and change one decision from your past. You know you can't actually change it — but you can imagine doing so. What feels closest to you?",[
 ["There are things I'd handle differently, but I wouldn't want to rewrite my life.","peace","integration"],
-["You immediately know the exact moment you'd change—and you've thought about it before.","healing","regret"],
+["You immediately know the exact moment you'd change — and you've thought about it before.","healing","regret"],
 ["You start imagining how your life today might look if you'd made that different choice.","anchor","alternate"],
 ["You think mostly about how someone else could have behaved differently and how much that might have changed things.","bound","anger"]]],
 ["It's late at night. Nothing particularly bad happened that day, but your mind naturally drifts toward your past. Where does it usually go?",[
@@ -112,123 +473,239 @@ const Q=[
 ["You know it changed you, although you're still figuring out exactly how.","healing","emotion"],
 ["Your mind immediately goes toward what you lost, what went wrong, or what you wish had been different.","anchor","regret"],
 ["You struggle to see anything beyond the hurt itself.","bound","emotion"]]],
-["You notice yourself doing something that once hurt you—withdrawing, chasing someone, avoiding difficult conversations, distrusting people, or trying too hard to keep someone close. What happens?",[
+["You notice yourself doing something that once hurt you — withdrawing, chasing someone, avoiding difficult conversations, distrusting people, or trying too hard to keep someone close. What happens?",[
 ["You recognise the pattern and consciously choose to respond differently.","peace","integration"],
 ["You notice it after some hesitation and try to correct yourself.","healing","awareness"],
 ["You recognise what's happening but still find yourself repeating it sometimes.","anchor","repetition"],
 ["The old response feels almost automatic because it once helped you protect yourself.","bound","protection"]]],
 ["Imagine that the person or situation from your past somehow became available to you again tomorrow. What's your most honest reaction?",[
-["Whatever I choose would be based on who I am and what I want today—not what I once wanted.","peace","integration"],
+["Whatever I choose would be based on who I am and what I want today — not what I once wanted.","peace","integration"],
 ["I'd have to think about it because a small part of me still wonders what could have been.","healing","attachment"],
 ["The thought immediately brings up a lot of 'what ifs.'","anchor","alternate"],
 ["My first reaction is emotional. I realise some part of me is still waiting for that possibility.","bound","attachment"]]],
 ["You picture yourself five years from today. How much space does your past occupy in that picture?",[
 ["Very little. It's part of my story, but I'm much more interested in what comes next.","peace","integration"],
 ["I still carry some lessons and memories from it, but my attention is mostly on the future.","healing","awareness"],
-["I sometimes imagine my future in relation to what happened—as if I'm trying to make up for something.","anchor","regret"],
+["I sometimes imagine my future in relation to what happened — as if I'm trying to make up for something.","anchor","regret"],
 ["A part of me feels that something from the past needs to be resolved before I can completely move forward.","bound","closure"]]]
 ];
 
 const STATES={
-peace:{icon:"🌱",title:"THE PEACEFUL MOVER",headline:"You've made peace with your past.",body:"The past is still part of your story, but it isn't running your present. You can remember without needing to return. You can acknowledge what happened without constantly asking what could have been.",strength:"Acceptance without attachment."},
-healing:{icon:"🌤️",title:"THE HEALING MOVER",headline:"You've moved forward, but some parts of the past still have a voice.",body:"You're living your life and may genuinely feel like you've moved on. But certain triggers can still reopen an emotional door. You don't necessarily want the past back. There may simply be something you haven't completely processed yet.",strength:"Awareness and forward movement."},
-anchor:{icon:"🪞",title:"THE EMOTIONAL ANCHOR",headline:"You've left the past behind—but part of you is still looking back.",body:"You may not want to return to what happened. But regret, unanswered questions, comparison, nostalgia, or 'what if?' thoughts may still keep part of your attention there. You're moving forward physically, but emotionally, there may still be a conversation happening with the past.",strength:"Your awareness can become the doorway to change."},
-bound:{icon:"🔒",title:"THE PAST-BOUND",headline:"Your past may still be influencing your present more than you realise.",body:"You may be protecting yourself, replaying what happened, waiting for closure, or holding onto a version of the past that never got the ending you wanted. This doesn't mean you're choosing to stay stuck. It may simply mean your mind hasn't found a way to feel safe moving forward yet.",strength:"The pattern can change once you can see it clearly."}
+  peace:{
+    icon:"🌱",title:"The Peaceful Mover",
+    headline:"You've made peace with your past.",
+    body:"The past is still part of your story, but it isn't running your present. You can remember without needing to return. You can acknowledge what happened without constantly asking what could have been.",
+    strength:"Acceptance without attachment.",
+    color:"var(--peace)"
+  },
+  healing:{
+    icon:"🌤️",title:"The Healing Mover",
+    headline:"You've moved forward, but some parts of the past still have a voice.",
+    body:"You're living your life and may genuinely feel like you've moved on. But certain triggers can still reopen an emotional door. You don't necessarily want the past back — there may simply be something you haven't completely processed yet.",
+    strength:"Awareness and forward movement.",
+    color:"var(--healing)"
+  },
+  anchor:{
+    icon:"🪞",title:"The Emotional Anchor",
+    headline:"You've left the past behind — but part of you is still looking back.",
+    body:"You may not want to return to what happened. But regret, unanswered questions, comparison, nostalgia, or 'what if?' thoughts may still keep part of your attention there. You're moving forward physically, but emotionally, there may still be a conversation happening with the past.",
+    strength:"Your awareness can become the doorway to change.",
+    color:"var(--anchor)"
+  },
+  bound:{
+    icon:"🔒",title:"The Past-Bound",
+    headline:"Your past may still be influencing your present more than you realise.",
+    body:"You may be protecting yourself, replaying what happened, waiting for closure, or holding onto a version of the past that never got the ending you wanted. This doesn't mean you're choosing to stay stuck — it may simply mean your mind hasn't found a way to feel safe moving forward yet.",
+    strength:"The pattern can change once you can see it clearly.",
+    color:"var(--bound)"
+  }
 };
 
 const PAT={
-regret:["Regret","You may be carrying the feeling that one different decision, conversation, or action could have changed everything. Your mind keeps negotiating with a version of the past that cannot be changed.","Replaying the past can create the illusion that you're solving it. Sometimes you're simply keeping the wound active.","If I could not change what happened, what would I choose to do with the lesson it left me?"],
-closure:["Need for Closure","Part of you may still be waiting for an answer, apology, explanation, or acknowledgment that would finally make the experience feel complete.","Closure does not always arrive from the person who left the wound. Waiting for their answer can keep your healing dependent on them.","What would I allow myself to accept even if I never receive the explanation I wanted?"],
-attachment:["Attachment","You may not simply be attached to the person or situation. You may still be attached to what it represented—the connection, possibility, identity, or future you imagined.","Missing something doesn't automatically mean you should have it back.","Do I miss what actually existed, or what I hoped it would become?"],
-nostalgia:["Nostalgia","You may be longing less for the past itself and more for who you were, how life felt, or what that chapter represented.","Memory often keeps the warmth and quietly edits out the reasons the chapter ended.","What exactly am I missing—and can I create that feeling in my life now?"],
-anger:["Unresolved Anger","Something about what happened may still feel unfair. You may understand that the situation is over while still carrying the emotional weight of what you believe should never have happened.","Holding onto anger can feel like refusing to let someone 'get away with it,' but it can also keep their actions present in your life.","What would letting go of the anger give me that holding onto it no longer does?"],
-fear:["Fear of Repetition","Your past may have taught you a lesson that your mind has turned into a warning system. You may watch for signs that the same pain could happen again.","Protecting yourself from the possibility of pain can also protect you from the possibility of something good.","Am I responding to what is happening now—or to what happened then?"],
-alternate:["The Alternate Life","Part of you may still be attached to the life you imagine you could have had if one decision, relationship, opportunity, or moment had gone differently.","An imagined future has no painful details, which can make it look better than the life that actually existed.","What can I build now that belongs to the life I actually have?"],
-identity:["Identity Loss","The experience may have changed how you see yourself. You may not only miss what happened—you may miss who you were before it happened.","You don't have to become your old self again to become whole. You can build an identity that includes what you've learned.","Who am I becoming now that this chapter is no longer the centre of my story?"],
-protection:["Emotional Protection","Your mind may have learned to protect you by staying distant, guarded, or prepared for disappointment. What once helped you survive the experience may still be shaping how you approach the present.","A defence that once kept you safe can become a wall when the danger is no longer there.","Where am I protecting myself from a danger that belongs to the past?"],
-emotion:["Unprocessed Emotion","The event may be over, but some of the emotion around it may not have been fully processed. Thinking you've moved on and actually processing what you felt are not always the same thing.","Ignoring an emotion doesn't make it disappear; it can simply make it show up somewhere else.","What feeling have I been trying to move past instead of allowing myself to understand?"],
-repetition:["Old Pattern","Your past may still be showing up through behaviour rather than memories. You may understand what happened but still repeat a response that once helped you cope.","Knowing the pattern intellectually isn't the same as responding differently when the trigger appears.","What would I do differently if I trusted myself to handle the outcome?"],
-awareness:["Awareness in Progress","You're beginning to recognise what the past changed in you. You may not have all the answers yet, but you are no longer completely unaware of the pattern.","Understanding yourself is valuable, but awareness becomes powerful when it starts changing your choices.","What is one small response I can change the next time this pattern appears?"],
-comparison:["Comparison With the Past","Your present may sometimes be measured against another person's progress or against the life you expected to have by now.","Comparing your current chapter with someone else's—or with an imagined version of your own life—can make the present feel smaller than it is.","What would my progress look like if I stopped using the past as my measuring stick?"],
-avoidance:["Emotional Avoidance","You may be avoiding certain places, memories, conversations, or situations because they still carry emotional weight.","Avoiding a trigger can reduce discomfort today without necessarily reducing its power over you.","What am I avoiding because I don't want to feel something—and what might happen if I allowed myself to feel it safely?"]
+  regret:["Regret","You may be carrying the feeling that one different decision, conversation, or action could have changed everything. Your mind keeps negotiating with a version of the past that cannot be changed.","Replaying the past can create the illusion that you're solving it. Sometimes you're simply keeping the wound active.","If I could not change what happened, what would I choose to do with the lesson it left me?"],
+  closure:["Need for Closure","Part of you may still be waiting for an answer, apology, explanation, or acknowledgment that would finally make the experience feel complete.","Closure does not always arrive from the person who left the wound. Waiting for their answer can keep your healing dependent on them.","What would I allow myself to accept even if I never receive the explanation I wanted?"],
+  attachment:["Attachment","You may not simply be attached to the person or situation. You may still be attached to what it represented — the connection, possibility, identity, or future you imagined.","Missing something doesn't automatically mean you should have it back.","Do I miss what actually existed, or what I hoped it would become?"],
+  nostalgia:["Nostalgia","You may be longing less for the past itself and more for who you were, how life felt, or what that chapter represented.","Memory often keeps the warmth and quietly edits out the reasons the chapter ended.","What exactly am I missing — and can I create that feeling in my life now?"],
+  anger:["Unresolved Anger","Something about what happened may still feel unfair. You may understand that the situation is over while still carrying the emotional weight of what you believe should never have happened.","Holding onto anger can feel like refusing to let someone 'get away with it,' but it can also keep their actions present in your life.","What would letting go of the anger give me that holding onto it no longer does?"],
+  fear:["Fear of Repetition","Your past may have taught you a lesson that your mind has turned into a warning system. You may watch for signs that the same pain could happen again.","Protecting yourself from the possibility of pain can also protect you from the possibility of something good.","Am I responding to what is happening now — or to what happened then?"],
+  alternate:["The Alternate Life","Part of you may still be attached to the life you imagine you could have had if one decision, relationship, opportunity, or moment had gone differently.","An imagined future has no painful details, which can make it look better than the life that actually existed.","What can I build now that belongs to the life I actually have?"],
+  identity:["Identity Loss","The experience may have changed how you see yourself. You may not only miss what happened — you may miss who you were before it happened.","You don't have to become your old self again to become whole. You can build an identity that includes what you've learned.","Who am I becoming now that this chapter is no longer the centre of my story?"],
+  protection:["Emotional Protection","Your mind may have learned to protect you by staying distant, guarded, or prepared for disappointment. What once helped you survive the experience may still be shaping how you approach the present.","A defence that once kept you safe can become a wall when the danger is no longer there.","Where am I protecting myself from a danger that belongs to the past?"],
+  emotion:["Unprocessed Emotion","The event may be over, but some of the emotion around it may not have been fully processed. Thinking you've moved on and actually processing what you felt are not always the same thing.","Ignoring an emotion doesn't make it disappear; it can simply make it show up somewhere else.","What feeling have I been trying to move past instead of allowing myself to understand?"],
+  repetition:["Old Pattern","Your past may still be showing up through behaviour rather than memories. You may understand what happened but still repeat a response that once helped you cope.","Knowing the pattern intellectually isn't the same as responding differently when the trigger appears.","What would I do differently if I trusted myself to handle the outcome?"],
+  awareness:["Awareness in Progress","You're beginning to recognise what the past changed in you. You may not have all the answers yet, but you are no longer completely unaware of the pattern.","Understanding yourself is valuable, but awareness becomes powerful when it starts changing your choices.","What is one small response I can change the next time this pattern appears?"],
+  comparison:["Comparison With the Past","Your present may sometimes be measured against another person's progress or against the life you expected to have by now.","Comparing your current chapter with someone else's — or with an imagined version of your own life — can make the present feel smaller than it is.","What would my progress look like if I stopped using the past as my measuring stick?"],
+  avoidance:["Emotional Avoidance","You may be avoiding certain places, memories, conversations, or situations because they still carry emotional weight.","Avoiding a trigger can reduce discomfort today without necessarily reducing its power over you.","What am I avoiding because I don't want to feel something — and what might happen if I allowed myself to feel it safely?"]
 };
 
-let index=0, data=[], scores={};
+// ── STATE ────────────────────────────────────────────────
+let index=0, selData=null, scores={};
 
-function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5);}
+function $(id){return document.getElementById(id);}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── QUIZ ─────────────────────────────────────────────────
 function startQuiz(){
- index=0; data=[]; scores={};
- document.getElementById("intro").classList.add("hidden");
- document.getElementById("result").classList.add("hidden");
- document.getElementById("quiz").classList.remove("hidden");
- show();
+  index=0; selData=null; scores={};
+  show('quiz');
+  renderQ();
 }
-function show(){
- const q=Q[index], opts=shuffle(q[1]);
- data[index]=opts;
- document.getElementById("qnum").textContent=`Question ${index+1} of ${Q.length}`;
- const pct=Math.round((index+1)/Q.length*100);
- document.getElementById("pct").textContent=pct+"%";
- document.getElementById("fill").style.width=pct+"%";
- document.getElementById("qtext").textContent=q[0];
- const box=document.getElementById("opts");box.innerHTML="";
- opts.forEach((o,i)=>{
-  const b=document.createElement("button");b.className="option";
-  b.textContent=String.fromCharCode(65+i)+") "+o[0];
-  b.onclick=()=>answer(i,b);box.appendChild(b);
- });
+
+function renderQ(){
+  const q=Q[index];
+  const opts=shuffle(q[1]);
+  window._opts=opts;
+
+  const wrap=$('q-wrap');
+  wrap.style.animation='none';
+  void wrap.offsetWidth;
+  wrap.style.animation='fadeUp 0.4s ease both';
+
+  $('prog-num').textContent=`${index+1} / ${Q.length}`;
+  $('prog-fill').style.width=`${((index)/Q.length)*100}%`;
+  $('q-number').textContent=`Question ${index+1}`;
+  $('q-text').textContent=q[0];
+
+  const letters=['A','B','C','D'];
+  $('opts').innerHTML=opts.map((o,i)=>`
+    <button class="opt" onclick="pick(${i},this)">
+      <div class="opt-letter">${letters[i]}</div>
+      <div class="opt-text">${o[0]}</div>
+    </button>
+  `).join('');
+
+  selData=null;
 }
-function answer(i,b){
- document.querySelectorAll(".option").forEach(x=>x.disabled=true);
- b.classList.add("selected");
- const o=data[index][i];
- scores[o[1]]=(scores[o[1]]||0)+1;
- scores["p_"+o[2]]=(scores["p_"+o[2]]||0)+1;
- setTimeout(()=>{if(index<Q.length-1){index++;show()}else{finish()}},220);
+
+function pick(i, el){
+  selData=window._opts[i];
+  document.querySelectorAll('.opt').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+
+  setTimeout(()=>{
+    scores[selData[1]]=(scores[selData[1]]||0)+1;
+    scores['p_'+selData[2]]=(scores['p_'+selData[2]]||0)+1;
+    index++;
+    if(index<Q.length){renderQ();}else{finish();}
+  },280);
 }
+
+// ── RESULT ───────────────────────────────────────────────
 function finish(){
- const stateKeys=["peace","healing","anchor","bound"];
- const state={peace:scores.peace||0,healing:scores.healing||0,anchor:scores.anchor||0,bound:scores.bound||0};
- let stateWin="peace";
- stateKeys.forEach(k=>{if(state[k]>state[stateWin])stateWin=k});
- const patterns=Object.keys(PAT);
- let pWin=patterns[0];
- patterns.forEach(k=>{if((scores["p_"+k]||0)>(scores["p_"+pWin]||0))pWin=k});
- const neutral=scores["p_integration"]||0;
- const hidden=patterns.reduce((n,k)=>n+(scores["p_"+k]||0),0);
- if(neutral>=8 && hidden<=5)pWin="integration";
- render(stateWin,pWin);
+  const stateKeys=["peace","healing","anchor","bound"];
+  let stateWin="peace";
+  stateKeys.forEach(k=>{if((scores[k]||0)>(scores[stateWin]||0))stateWin=k;});
+
+  const patKeys=Object.keys(PAT);
+  let pWin=patKeys[0];
+  patKeys.forEach(k=>{if((scores['p_'+k]||0)>(scores['p_'+pWin]||0))pWin=k;});
+
+  const neutral=scores['p_integration']||0;
+  const hiddenTotal=patKeys.reduce((n,k)=>n+(scores['p_'+k]||0),0);
+  if(neutral>=8 && hiddenTotal<=5)pWin='integration';
+
+  render(stateWin,pWin);
 }
+
 function render(sk,pk){
- const s=STATES[sk], p=PAT[pk];
- document.getElementById("quiz").classList.add("hidden");
- document.getElementById("result").classList.remove("hidden");
- document.getElementById("icon").textContent=s.icon;
- document.getElementById("title").textContent=s.title;
- document.getElementById("headline").textContent=s.headline;
- document.getElementById("body").innerHTML="<p>"+s.body+"</p><p><strong>Your strength:</strong> "+s.strength+"</p>";
- if(pk==="integration"){
-  document.getElementById("pname").textContent="Integration";
-  document.getElementById("ptext").textContent="Your answers suggest that the past has become part of your story without demanding much emotional attention from you today.";
-  document.getElementById("blind").textContent="Being at peace doesn't mean the past never crosses your mind. It means it doesn't need to control what happens next.";
-  document.getElementById("reflect").textContent="What lesson from my past do I want to carry forward without carrying the pain?";
- }else{
-  document.getElementById("pname").textContent=p[0];
-  document.getElementById("ptext").textContent=p[1];
-  document.getElementById("blind").textContent=p[2];
-  document.getElementById("reflect").textContent=p[3];
- }
- const rows=document.getElementById("scoreRows");rows.innerHTML="";
- patternsForDisplay=["regret","closure","attachment","nostalgia","anger","fear","alternate"];
- patternsForDisplay.forEach(k=>{
-  const n=scores["p_"+k]||0, w=Math.min(100,n*20);
-  rows.innerHTML+=`<div class="row"><div class="rowtop"><span>${PAT[k][0]}</span><span>${n}</span></div><div class="scorebar"><div class="scorefill" style="width:${w}%"></div></div></div>`;
- });
+  show('result');
+  const s=STATES[sk];
+
+  // pattern data
+  let pName,pText,pBlind,pReflect;
+  if(pk==='integration'){
+    pName='Integration';
+    pText="Your answers suggest that the past has become part of your story without demanding much emotional attention from you today.";
+    pBlind="Being at peace doesn't mean the past never crosses your mind. It means it doesn't need to control what happens next.";
+    pReflect="What lesson from my past do I want to carry forward without carrying the pain?";
+  } else {
+    const p=PAT[pk];
+    pName=p[0]; pText=p[1]; pBlind=p[2]; pReflect=p[3];
+  }
+
+  // score bars
+  const displayPats=["regret","closure","attachment","nostalgia","anger","fear","alternate"];
+  const maxScore=Math.max(...displayPats.map(k=>scores['p_'+k]||0),1);
+  const bars=displayPats.map(k=>{
+    const v=scores['p_'+k]||0;
+    const w=Math.round((v/maxScore)*100);
+    return `
+      <div class="score-row">
+        <div class="score-top">
+          <span class="score-label">${PAT[k][0]}</span>
+          <span class="score-num">${v}</span>
+        </div>
+        <div class="score-track">
+          <div class="score-bar-fill" style="width:${w}%"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  $('result-inner').innerHTML=`
+    <div class="res-hero">
+      <div class="res-state-tag" style="color:${s.color}">${s.icon} Your emotional state</div>
+      <div class="res-title" style="color:${s.color}">${s.title}</div>
+      <div class="res-headline">${s.headline}</div>
+      <div class="res-rule"></div>
+    </div>
+
+    <div class="res-content">
+
+      <div class="res-state-card">
+        <div class="card-eyebrow">Where you are</div>
+        <div class="card-heading">What this says about you</div>
+        <div class="card-body">${s.body}</div>
+        <div class="card-strength">Your strength — ${s.strength}</div>
+      </div>
+
+      <div class="res-pattern-card">
+        <div class="card-eyebrow">What's still keeping you stuck</div>
+        <div class="pattern-name">${pName}</div>
+        <div class="pattern-body">${pText}</div>
+      </div>
+
+      <div class="res-two">
+        <div class="res-mini">
+          <div class="card-eyebrow">Blind spot</div>
+          <div class="card-heading" style="font-size:16px">What you may not see</div>
+          <div class="card-body">${pBlind}</div>
+        </div>
+        <div class="res-mini">
+          <div class="card-eyebrow">Next reflection</div>
+          <div class="card-heading" style="font-size:16px">A question to sit with</div>
+          <div class="card-body" style="font-style:italic">${pReflect}</div>
+        </div>
+      </div>
+
+      <div class="res-scores">
+        <div class="scores-heading">Your hidden pattern profile</div>
+        ${bars}
+      </div>
+
+      <div class="res-quote">
+        <div class="res-quote-text">"You don't have to erase your past to stop letting it run your present."</div>
+      </div>
+
+      <div class="res-retake">
+        <button class="btn-retake" onclick="restart()">
+          ← Retake Assessment
+        </button>
+      </div>
+
+    </div>
+  `;
 }
+
 function restart(){
- document.getElementById("result").classList.add("hidden");
- document.getElementById("quiz").classList.add("hidden");
- document.getElementById("intro").classList.remove("hidden");
+  show('intro');
 }
 </script>
 </body>
